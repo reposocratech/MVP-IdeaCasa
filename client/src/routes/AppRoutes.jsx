@@ -5,6 +5,7 @@ import { PublicLayout } from '../layouts/PublicLayout';
 
 //componentes públicos
 const Home = lazy(() => import('../pages/publicPages/home/Home'));
+const Services = lazy(() => import('../pages/publicPages/services/Services'));
 
 export const AppRoutes = () => {
   return (
@@ -17,10 +18,11 @@ export const AppRoutes = () => {
             <Route element={<PublicRoutes />}>
               <Route element={<PublicLayout />}>
                 <Route path='/' element={<Home />} />
+                <Route path='/services' element={<Services />} />
               </Route>
             </Route>
           </Routes>
-          
+
         </Suspense>
       </BrowserRouter>
     </>
