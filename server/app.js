@@ -1,26 +1,26 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import logger from 'morgan';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//importaciones de ruta
+import adminRoutes from './modules/admin/admin.routes.js';
 
-var app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+const app = express();
 
+app.use(cors()); //para cors policy, esta deja hacer peticiones a cualquier app
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//middlewares de rutas
+app.use('/api/admin', adminRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -38,4 +38,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;
