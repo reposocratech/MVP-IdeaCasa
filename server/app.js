@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 
 //importaciones de ruta
 import adminRoutes from './modules/admin/admin.routes.js';
+import usersRoutes from './modules/users/users.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //middlewares de rutas
 app.use('/api/admin', adminRoutes);
+app.use('/api/users', usersRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
