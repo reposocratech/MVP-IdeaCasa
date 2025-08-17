@@ -1,4 +1,4 @@
-drop database idea_casa;
+
 CREATE DATABASE idea_casa;
 use idea_casa;
 
