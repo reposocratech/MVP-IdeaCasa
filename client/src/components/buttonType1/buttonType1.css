@@ -1,0 +1,24 @@
+.custom-btn1 {
+  padding: 0.5rem 3rem;
+  font-family: "Montserrat", sans-serif;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  color: white;
+}
+
+.custom-btn1-primary {
+  background-color: var(--primary-color);
+}
+
+.custom-btn1-primary:hover {
+  filter: brightness(85%);
+}
+
+.custom-btn1-secondary {
+  background-color: var(--secondary-color);
+}
+
+.custom-btn1-secondary:hover {
+  filter: brightness(85%);
+}
