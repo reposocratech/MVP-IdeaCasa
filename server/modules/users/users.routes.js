@@ -8,4 +8,6 @@ const router = express.Router();
 //queda pendiente de hablar con profes
 router.post("/adminRegister", usersController.adminRegister);
 
+router.post("/register", usersController.register);
+
 export default router;
