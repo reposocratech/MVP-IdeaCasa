@@ -1,0 +1,23 @@
+.custom-btn2 {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  color: rgb(0, 0, 0);
+}
+
+.custom-btn2-edit {
+  background-color: #a7bfe0;
+}
+
+.custom-btn2-edit:hover {
+  filter: brightness(90%);
+}
+
+.custom-btn2-delete {
+  background-color: #fbb8b8;
+}
+
+.custom-btn2-delete:hover {
+  filter: brightness(90%);
+}

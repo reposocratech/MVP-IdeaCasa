@@ -8,10 +8,27 @@ body {
   font-family: "Source Sans 3", sans-serif;
 }
 
+.container {
+  max-width: 1440px;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: "Montserrat", sans-serif;
 }
 
-.container {
-  max-width: 1440px;
+p {
+  line-height: 1.4;
+}
+
+label {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.bg-light-grey {
+  background-color: var(--bg-light-color);
+}
+
+button {
+  cursor: pointer;
 }
