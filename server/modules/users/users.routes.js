@@ -5,6 +5,7 @@ import usersController from './users.controllers.js';
 
 const router = express.Router();
 
-router.post("/register", usersController.register);
+//queda pendiente de hablar con profes
+router.post("/adminRegister", usersController.adminRegister);
 
 export default router;
