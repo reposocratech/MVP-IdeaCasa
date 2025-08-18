@@ -3,7 +3,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { ButtonType1 } from '../../../components/buttonType1/ButtonType1';
-import { ButtonType2 } from '../../../components/buttonType2/ButtonType2';
+import { fetchData } from '../../../helpers/axiosHelper';
+import { FooterSimple } from '../../../components/footer/footerSimple/FooterSimple';
 
 const initialValue = {
   name: "",
@@ -25,7 +26,21 @@ const ResponRegister = () => {
     setRegister({...register, [name]: value});
   }
 
+  const onSubmit = async(e) => {
+    e.preventDefault();
+    
+    try {
+      //validacion
+
+      const res = await fetchData('/users/register', 'post', register);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
+    <>
     <section className='py-5 bg-light-grey'>
       <div className="container">
         <div className='mx-auto w-75 p-3 bg-white rounded-4'>
@@ -117,7 +132,11 @@ const ResponRegister = () => {
                   />
                 </Form.Group>
                 <div className='text-end py-4'>
-                  <ButtonType1 variant="primary">Aceptar</ButtonType1>
+                  <ButtonType1 
+                    variant="primary"
+                    type='button'
+                    onClick={onSubmit}
+                  >Aceptar</ButtonType1>
                 </div>
               </Col>
             </Row>
@@ -125,6 +144,9 @@ const ResponRegister = () => {
         </div>
       </div>
     </section>
+
+    <FooterSimple />
+    </>
   )
 }
 

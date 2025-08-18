@@ -1,0 +1,7 @@
+.bg-img-login {
+  background-image: url(/images/bg-login.jpg);
+  background-size: cover;
+  max-width: 70rem;
+  padding-block: 7rem;
+  border-radius: 20px;
+}
