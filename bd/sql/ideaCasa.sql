@@ -8325,8 +8325,9 @@ CREATE TABLE service (
     visitor_area TINYINT,
     visitor_building TINYINT,
     visitor_property TINYINT,
+    observations TEXT,
     CONSTRAINT fk_property_6 FOREIGN KEY (property_id) 
     REFERENCES property(property_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
+ALTER TABLE service ADD COLUMN observations TEXT AFTER visitor_property;

@@ -11,9 +11,10 @@ class UserDal {
     }
   }
 
-  register = async(data) => {
+  //queda pendiente de hablar con profes
+  adminRegister = async(data) => {
     try {
-      let sql = 'INSERT INTO user (name, email, password) VALUES (?, ?, ?)';
+      let sql = 'INSERT INTO user (name, email, password, type) VALUES (?, ?, ?, ?)';
       await executeQuery(sql, data);
     } catch (error) {
       throw {message: "Error en base de datos"};

@@ -20,12 +20,20 @@ const AdminRegister = () => {
 
   const onSubmit = async() => {
     try {
-      //validacion
+      //validacion a consultar con santi
+      /* const { valid, errors } = validateForm(registerSchema, register);
+      setValErrors(errors);
 
-      let res = await fetchData('/users/register', "post", register);
+      if (valid) {
+        const res = await fetchData('/users/register', 'post', register);
+      } */
+
+      const res = await fetchData('/users/adminRegister', 'post', register);
       console.log(res);
     } catch (error) {
       console.log(error);
+      //setValErrors({});
+      //setMsgError(error?.response?.data || "Error inesperado en el servidor");
     }
   }
 
