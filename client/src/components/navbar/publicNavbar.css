@@ -1,0 +1,20 @@
+.nav-public {
+  background-color: transparent;
+
+  img {
+    width: 3.8rem;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500; 
+    transition: text-shadow 0.2s;
+
+    &:hover {
+      text-shadow: 0 0 1px #000; 
+    }
+  }
+}
