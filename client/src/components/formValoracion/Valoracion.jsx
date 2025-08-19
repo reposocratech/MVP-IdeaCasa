@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Button, Form, Col, Row, Container } from 'react-bootstrap'
 import { ButtonType1 } from '../buttonType1/ButtonType1'
 import { fetchData } from '../../helpers/axiosHelper'
+import { valoracionSchema } from '../../schemas/valoracionSchema'
+import { ZodError } from 'zod'
 
 const initialValue = {
   tipo: '',
@@ -23,8 +25,9 @@ const initialValue = {
 
 export const Valoracion = () => {
   const [formData, setFormData] = useState(initialValue)
-  const [msgError, setMsgError] = useState('')
+  const [formErrors, setFormErrors] = useState({})
   const [msgSuccess, setMsgSuccess] = useState('')
+  const [msgError, setMsgError] = useState('')
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -32,31 +35,20 @@ export const Valoracion = () => {
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
     })
+    if (formErrors[name]) {
+      setFormErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }))
+    }
   }
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    setMsgError('')
+    setFormErrors({})
     setMsgSuccess('')
+    setMsgError('')
 
     try {
-      if (
-        !formData.nombreContacto ||
-        !formData.emailContacto ||
-        !formData.ciudad ||
-        !formData.tipo
-      ) {
-        setMsgError(
-          'Por favor, completa todos los campos obligatorios: Tipo de Inmueble, Ciudad, Nombre y Email.'
-        )
-        return
-      }
-      if (!formData.aceptoPrivacidad) {
-        setMsgError(
-          'Debes aceptar la política de privacidad para enviar la solicitud.'
-        )
-        return
-      }
+      valoracionSchema.parse(formData)
+
       const res = await fetchData('/valoracion/solicitar', 'post', formData)
 
       if (res.status === 200) {
@@ -71,11 +63,32 @@ export const Valoracion = () => {
         )
       }
     } catch (error) {
-      console.error('Error al enviar la solicitud desde el cliente:', error)
-      setMsgError(
-        error.response?.data?.message ||
-          'No se pudo conectar con el servidor o hubo un error al enviar la solicitud.'
-      )
+      if (error instanceof ZodError) {
+        const newErrors = {}
+        error.errors.forEach((err) => {
+          newErrors[err.path[0]] = err.message
+        })
+        setFormErrors(newErrors)
+        setMsgError('Por favor, corrige los errores en el formulario.')
+      } else if (error.response) {
+        setMsgError(
+          error.response.data.message ||
+            'Error del servidor al procesar la solicitud.'
+        )
+
+        if (error.response.data.errors) {
+          const backendErrors = {}
+          error.response.data.errors.forEach((err) => {
+            backendErrors[err.field] = err.message
+          })
+          setFormErrors(backendErrors)
+        }
+      } else {
+        setMsgError(
+          'No se pudo conectar con el servidor o hubo un error inesperado.'
+        )
+      }
+      console.error('Error al enviar la solicitud:', error)
     }
   }
 
@@ -99,8 +112,11 @@ export const Valoracion = () => {
                 name="tipo"
                 value={formData.tipo}
                 onChange={handleChange}
-                required
+                isInvalid={!!formErrors.tipo}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.tipo}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formCiudad">
               <Form.Label>Ciudad</Form.Label>
@@ -110,8 +126,11 @@ export const Valoracion = () => {
                 name="ciudad"
                 value={formData.ciudad}
                 onChange={handleChange}
-                required
+                isInvalid={!!formErrors.ciudad}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.ciudad}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formProvincia">
               <Form.Label>Provincia</Form.Label>
@@ -121,7 +140,11 @@ export const Valoracion = () => {
                 name="provincia"
                 value={formData.provincia}
                 onChange={handleChange}
+                isInvalid={!!formErrors.provincia}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.provincia}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formCalle">
               <Form.Label>Calle</Form.Label>
@@ -131,7 +154,11 @@ export const Valoracion = () => {
                 name="calle"
                 value={formData.calle}
                 onChange={handleChange}
+                isInvalid={!!formErrors.calle}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.calle}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formCodigoPostal">
               <Form.Label>Código postal</Form.Label>
@@ -141,7 +168,11 @@ export const Valoracion = () => {
                 name="codigoPostal"
                 value={formData.codigoPostal}
                 onChange={handleChange}
+                isInvalid={!!formErrors.codigoPostal}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.codigoPostal}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Row className="mb-3">
@@ -154,7 +185,11 @@ export const Valoracion = () => {
                     name="planta"
                     value={formData.planta}
                     onChange={handleChange}
+                    isInvalid={!!formErrors.planta}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.planta}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col xs={12} md={6}>
@@ -166,7 +201,11 @@ export const Valoracion = () => {
                     name="dormitorios"
                     value={formData.dormitorios}
                     onChange={handleChange}
+                    isInvalid={!!formErrors.dormitorios}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.dormitorios}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -181,7 +220,11 @@ export const Valoracion = () => {
                     name="superficie"
                     value={formData.superficie}
                     onChange={handleChange}
+                    isInvalid={!!formErrors.superficie}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.superficie}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col xs={12} md={6}>
@@ -193,7 +236,11 @@ export const Valoracion = () => {
                     name="baños"
                     value={formData.baños}
                     onChange={handleChange}
+                    isInvalid={!!formErrors.baños}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.baños}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -209,8 +256,11 @@ export const Valoracion = () => {
                 name="nombreContacto"
                 value={formData.nombreContacto}
                 onChange={handleChange}
-                required
+                isInvalid={!!formErrors.nombreContacto}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.nombreContacto}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formTelefonoContacto">
               <Form.Label>Teléfono</Form.Label>
@@ -220,7 +270,11 @@ export const Valoracion = () => {
                 name="telefonoContacto"
                 value={formData.telefonoContacto}
                 onChange={handleChange}
+                isInvalid={!!formErrors.telefonoContacto}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.telefonoContacto}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formEmailContacto">
               <Form.Label>Email</Form.Label>
@@ -230,8 +284,11 @@ export const Valoracion = () => {
                 name="emailContacto"
                 value={formData.emailContacto}
                 onChange={handleChange}
-                required
+                isInvalid={!!formErrors.emailContacto}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.emailContacto}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formMensajeContacto">
               <Form.Label>Mensaje</Form.Label>
@@ -242,7 +299,11 @@ export const Valoracion = () => {
                 name="mensajeContacto"
                 value={formData.mensajeContacto}
                 onChange={handleChange}
+                isInvalid={!!formErrors.mensajeContacto}
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.mensajeContacto}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formAceptoPrivacidad">
@@ -251,6 +312,7 @@ export const Valoracion = () => {
                 name="aceptoPrivacidad"
                 checked={formData.aceptoPrivacidad}
                 onChange={handleChange}
+                isInvalid={!!formErrors.aceptoPrivacidad}
                 label={
                   <>
                     Acepto que mis datos sean gestionados de acuerdo con mi{' '}
@@ -264,8 +326,10 @@ export const Valoracion = () => {
                     .
                   </>
                 }
-                required
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.aceptoPrivacidad}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formAceptoNovedades">
               <Form.Check
@@ -273,8 +337,12 @@ export const Valoracion = () => {
                 name="aceptoNovedades"
                 checked={formData.aceptoNovedades}
                 onChange={handleChange}
+                isInvalid={!!formErrors.aceptoNovedades}
                 label="Acepto de modo inequívoco recibir boletines, novedades o comunicaciones de esta entidad."
               />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.aceptoNovedades}
+              </Form.Control.Feedback>
             </Form.Group>
 
             {msgError && <p className="text-danger mt-3">{msgError}</p>}
