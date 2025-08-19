@@ -7,23 +7,25 @@ import { PrivateRoutes } from './PrivateRoutes';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContextProvider';
-
+import { RegisterRequest } from '../pages/publicPages/registerRequest/RegisterRequest';
 
 //componentes públicos
 const Home = lazy(() => import('../pages/publicPages/home/Home'));
 const Services = lazy(() => import('../pages/publicPages/services/Services'));
-const AdminRegister = lazy(() => import('../pages/publicPages/adminRegister/AdminRegister'));
-const ResponRegister = lazy(() => import('../pages/publicPages/responRegister/ResponRegister'));
+const Contact = lazy(() => import('../pages/publicPages/contact/Contact'));
 const Login = lazy(() => import('../pages/publicPages/login/Login'));
 const ValoracionPage = lazy(() =>
   import('../pages/publicPages/valoracion/ValoracionPage')
 )
 
+const ResponRegister = lazy(() => import('../pages/userPages/responRegister/ResponRegister'));
+
 //componentes de admin
+const AdminRegister = lazy(() => import('../pages/adminPages/adminRegister/AdminRegister'));
 const AdminDashboard = lazy(() => import('../pages/adminPages/adminDashboard/AdminDashboard'));
 
 export const AppRoutes = () => {
-  const {user, loading} = useContext(AuthContext);
+  const {user, loading, isRegistering } = useContext(AuthContext);
 
   return (
     <>
@@ -35,18 +37,16 @@ export const AppRoutes = () => {
             <Route element={<PublicRoutes />}>
               <Route element={<PublicLayout />}>
                 <Route path='/' element={<Home />} />
-                <Route path='/services' element={<Services />} />
-                <Route path='/adminRegister' element={<AdminRegister />} />
+                <Route path='/servicios' element={<Services />} />
+                <Route path='/contacto' element={<Contact />} />
+                <Route path='/login' element={<Login />}/>
+                <Route path='/registerRequest/:token' element={<RegisterRequest />}/>
               </Route>
             </Route>
 
-            <Route element={<PublicRoutes />}>
+            <Route element={<PrivateRoutes userType={isRegistering} requiredUser={true} />}>
               <Route element={<SemipublicLayout />}>
-                <Route path='/responRegister' element={<ResponRegister />} />
-                <Route path='/login' element={<Login />}/>  <Route
-                  path="/solicitar-valoracion"
-                  element={<ValoracionPage />}
-                />
+                <Route path='/userRegister' element={<ResponRegister />} />
               </Route>
             </Route>
 
@@ -55,6 +55,7 @@ export const AppRoutes = () => {
             <Route element={<PrivateRoutes userType={user?.type} requiredUser={1} />}>
               <Route element={<AdminLayout />}>
                 <Route path='/admin' element={<AdminDashboard />} />
+                <Route path='/adminRegister' element={<AdminRegister />} />
               </Route>
             </Route>
 

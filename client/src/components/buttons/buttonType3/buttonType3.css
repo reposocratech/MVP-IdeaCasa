@@ -1,0 +1,13 @@
+.custom-btn3 {
+  padding: 0.5rem 2rem;
+  font-family: "Montserrat", sans-serif;
+  border: none;
+  border-radius: 7px;
+  font-weight: 400;
+  color: white;
+  background-color: transparent;
+}
+
+.custom-btn3:hover {
+  background-color: var(--secondary-color);
+}

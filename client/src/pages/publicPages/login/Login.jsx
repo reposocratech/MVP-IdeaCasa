@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import './login.css';
-import { ButtonType1 } from '../../../components/buttonType1/ButtonType1';
+import { ButtonType1 } from '../../../components/buttons/buttonType1/ButtonType1';
 import { useContext } from 'react';
 import { AuthContext } from '../../../context/AuthContextProvider';
 import { validateForms } from '../../../helpers/validateForms';
