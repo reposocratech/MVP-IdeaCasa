@@ -4,7 +4,7 @@ use idea_casa;
 
 
 CREATE TABLE user (
-	user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+	user_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     type TINYINT(3) NOT NULL DEFAULT 2,
     name VARCHAR(50) NOT NULL,
     lastname VARCHAR(100),
@@ -8214,7 +8214,7 @@ VALUES
 	(48, 8116, "Ziortza-Bolibar");
 
 CREATE TABLE property (
-    property_id BIGINT UNSIGNED NOT NULL PRIMARY KEY, -- let id = select max(property_id) from property; id++; insert (${id))...
+    property_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- let id = select max(property_id) from property; id++; insert (${id))...
     title VARCHAR(255) NOT NULL,
     price DECIMAL(12,2) NOT NULL, -- 9.999.999.999,99
     rooms TINYINT UNSIGNED NOT NULL,
@@ -8239,8 +8239,8 @@ CREATE TABLE property (
 );
 
 
-select * from city, province where province.name = "Ourense" and province.province_id = city.province_id;
-select * from city, province where province.province_id = 29 and province.province_id = city.province_id;
+-- select * from city, province where province.name = "Ourense" and province.province_id = city.province_id;
+-- select * from city, province where province.province_id = 29 and province.province_id = city.province_id;
 
 
 create table user_property(
@@ -8330,4 +8330,8 @@ CREATE TABLE service (
     REFERENCES property(property_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-ALTER TABLE service ADD COLUMN observations TEXT AFTER visitor_property;
+
+
+INSERT INTO user (name, email, password, type) VALUES ("admin1", "admin@admin.com", "12345", 1);
+
+SELECT * FROM user;

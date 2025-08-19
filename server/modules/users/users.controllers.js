@@ -2,7 +2,6 @@ import { hashString } from "../../helpers/hashUtils.js";
 import usersDal from "./users.dal.js";
 
 class UserController {
-  //queda pendiente de hablar con profes
   adminRegister = async(req, res) => {
     try {
       const {name, email, password} = req.body;

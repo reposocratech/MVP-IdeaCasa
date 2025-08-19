@@ -2,8 +2,6 @@ import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import './login.css';
 import { ButtonType1 } from '../../../components/buttonType1/ButtonType1';
-import { FooterSimple } from '../../../components/footer/footerSimple/FooterSimple';
-import { PublicNavbar } from '../../../components/navbar/PublicNavbar';
 
 const initialValue = {
   email: "",
@@ -54,8 +52,6 @@ const Login = () => {
         </div>
       </div>
     </section>
-
-    <FooterSimple />
     </>
 
   )
