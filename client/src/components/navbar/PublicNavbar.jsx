@@ -11,22 +11,22 @@ export const PublicNavbar = () => {
         <Row className='align-items-center justify-content-between'>
           <Col xs="auto">
             <div>
-              <Link><img src="/images/logo-ideacasa.jpg" alt="Logo ideacasa" /></Link>
+              <Link to='/'><img src="/images/logo-ideacasa.jpg" alt="Logo ideacasa" /></Link>
             </div>
           </Col>
           <Col xs="auto">
             <div className='d-flex justify-content-center gap-4'>
-              <Link>Venta</Link>
-              <Link>Alquiler</Link>
-              <Link>Valora tu inmueble</Link>
-              <Link>Servicios</Link>
-              <Link>Contacto</Link>
+              <Link to='/venta'>Venta</Link>
+              <Link to='/alquiler'>Alquiler</Link>
+              <Link to='/valora'>Valora tu inmueble</Link>
+              <Link to='servicios'>Servicios</Link>
+              <Link to='/contacto'>Contacto</Link>
             </div>
           </Col>
           <Col xs="auto">
             <div className='d-flex gap-2'>
               <BsTelephone size={22} />
-              <Link>+34 951995959</Link>
+              <Link to="tel:+34951995959">+34 951995959</Link>
             </div>
           </Col>
         </Row>

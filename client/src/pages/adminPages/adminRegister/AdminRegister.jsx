@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Form from 'react-bootstrap/Form';
-import { ButtonType1 } from '../../../components/buttonType1/ButtonType1';
+import { ButtonType1 } from '../../../components/buttons/buttonType1/ButtonType1';
 import { fetchData } from '../../../helpers/axiosHelper';
 import { validateForms } from '../../../helpers/validateForms';
 import { adminRegisterSchema } from '../../../zodSchemas/adminRegisterSchema';

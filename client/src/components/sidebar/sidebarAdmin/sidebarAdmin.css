@@ -1,0 +1,9 @@
+.sidebar-admin {
+  width: 20rem;
+  min-height: 100dvh;
+  padding: 1rem;
+
+  img {
+    width: 40%;
+  }
+}

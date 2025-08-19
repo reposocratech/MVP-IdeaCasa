@@ -9,6 +9,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [token, setToken] = useState();
   const [loading, setLoading] = useState(true);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   useEffect(() => {
     let tokenLS = localStorage.getItem("token");
@@ -66,7 +67,9 @@ export const AuthContextProvider = ({ children }) => {
       login,
       logout,
       token,
-      loading
+      loading,
+      isRegistering,
+      setIsRegistering
     }}>
       {children}
     </AuthContext.Provider>
