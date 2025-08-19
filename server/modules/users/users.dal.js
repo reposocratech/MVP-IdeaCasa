@@ -11,7 +11,16 @@ class UserDal {
     }
   }
 
-  //queda pendiente de hablar con profes
+  findUserByEmailLogin = async(email) => {
+    try {
+      let sql = 'SELECT user_id, password FROM user WHERE email = ? AND user_is_deleted = 0';
+      let result = await executeQuery(sql, [email]);
+      return result;
+    } catch (error) {
+      throw {message: "Error en base de datos"};
+    }
+  }
+
   adminRegister = async(data) => {
     try {
       let sql = 'INSERT INTO user (name, email, password, type) VALUES (?, ?, ?, ?)';
@@ -22,28 +31,23 @@ class UserDal {
   }
 
   register = async(data) => {
-    const [ name, lastname, email, phone_number, dni, address, agency, password ] = data;
-    const connection = await dbPool.getConnection();
-
     try {
-      await connection.beginTransaction();
-
-      let sqlMax = 'SELECT MAX(user_id) AS lastId FROM user';
-      let resultMax = await connection.query(sqlMax);
-      const nextUserId = (resultMax[0][0].lastId || 0) + 1;
-
-      let sql = 'INSERT INTO user (user_id, name, lastname, email, phone_number, dni, address, agency, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-      let values = [nextUserId, name, lastname, email, phone_number, dni, address, agency, password];
-      await connection.query(sql, values);
-
-      await connection.commit();
-      return nextUserId;
+      let sql = 'INSERT INTO user (name, lastname, email, phone_number, dni, address, agency, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+      await executeQuery(sql, data);
     } catch (error) {
-      await connection.rollback();
       console.log(error);
       throw {message: "Error en base de datos"};
-    } finally {
-      connection.release();
+    }
+  }
+
+  userById = async(id) => {
+    try {
+      let sql = 'SELECT * FROM user WHERE user_id = ? AND user_is_deleted = 0';
+      const result = await executeQuery(sql, [id]);
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw {message: "Error en base de datos"};
     }
   }
 }
