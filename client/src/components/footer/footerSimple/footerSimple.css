@@ -1,0 +1,19 @@
+.footer-secondary {
+  background-color: var(--primary-color);
+  color: var(--text-grey);
+  padding-block: 1rem;
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--text-grey);
+  }
+
+  .icon-circle {
+    background-color: white;
+    padding: 0.2rem;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px; 
+  }
+}
