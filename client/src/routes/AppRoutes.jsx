@@ -14,9 +14,7 @@ const Home = lazy(() => import('../pages/publicPages/home/Home'));
 const Services = lazy(() => import('../pages/publicPages/services/Services'));
 const Contact = lazy(() => import('../pages/publicPages/contact/Contact'));
 const Login = lazy(() => import('../pages/publicPages/login/Login'));
-const ValoracionPage = lazy(() =>
-  import('../pages/publicPages/valoracion/ValoracionPage')
-)
+const ValoracionPage = lazy(() => import('../pages/publicPages/valoracion/ValoracionPage'));
 
 const ResponRegister = lazy(() => import('../pages/userPages/responRegister/ResponRegister'));
 
@@ -37,6 +35,7 @@ export const AppRoutes = () => {
             <Route element={<PublicRoutes />}>
               <Route element={<PublicLayout />}>
                 <Route path='/' element={<Home />} />
+                <Route path='/valoracion' element={<ValoracionPage />}/>
                 <Route path='/servicios' element={<Services />} />
                 <Route path='/contacto' element={<Contact />} />
                 <Route path='/login' element={<Login />}/>
