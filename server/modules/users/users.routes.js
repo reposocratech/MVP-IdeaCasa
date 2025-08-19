@@ -5,11 +5,14 @@ import usersController from './users.controllers.js';
 import { validateForms } from '../../middlewares/validateForms.js';
 import { registerSchema } from '../../zodSchemas/registerSchema.js';
 import { adminRegisterSchema } from '../../zodSchemas/adminRegisterSchema.js';
+import { verifyToken } from '../../middlewares/verifyToken.js';
+import { loginSchema } from '../../zodSchemas/loginSchema.js';
 
 const router = express.Router();
 
 router.post("/adminRegister", validateForms(adminRegisterSchema), usersController.adminRegister);
-
 router.post("/register", validateForms(registerSchema), usersController.register);
+router.post("/login", validateForms(loginSchema), usersController.login);
+router.get("/userById", verifyToken, usersController.userById);
 
 export default router;

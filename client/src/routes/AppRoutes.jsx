@@ -3,6 +3,10 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import { PublicRoutes } from './PublicRoutes';
 import { PublicLayout } from '../layouts/PublicLayout';
 import { SemipublicLayout } from '../layouts/SemipublicLayout';
+import { PrivateRoutes } from './PrivateRoutes';
+import { AdminLayout } from '../layouts/AdminLayout';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContextProvider';
 
 //componentes públicos
 const Home = lazy(() => import('../pages/publicPages/home/Home'));
@@ -11,9 +15,15 @@ const AdminRegister = lazy(() => import('../pages/publicPages/adminRegister/Admi
 const ResponRegister = lazy(() => import('../pages/publicPages/responRegister/ResponRegister'));
 const Login = lazy(() => import('../pages/publicPages/login/Login'));
 
+//componentes de admin
+const AdminDashboard = lazy(() => import('../pages/adminPages/adminDashboard/AdminDashboard'));
+
 export const AppRoutes = () => {
+  const {user, loading} = useContext(AuthContext);
+
   return (
     <>
+      {loading? <h1>Cargando...</h1> :
       <BrowserRouter>
         <Suspense fallback={<h1>Cargando...</h1>}>
 
@@ -33,10 +43,17 @@ export const AppRoutes = () => {
                 <Route path='/login' element={<Login />}/>
               </Route>
             </Route>
-          </Routes>
 
+            {/* rutas privadas de admin */}
+            <Route element={<PrivateRoutes userType={user?.type} requiredUser={1} />}>
+              <Route element={<AdminLayout />}>
+                <Route path='/admin' element={<AdminDashboard />} />
+              </Route>
+            </Route>
+          </Routes>
         </Suspense>
       </BrowserRouter>
+      }
     </>
   )
 }
