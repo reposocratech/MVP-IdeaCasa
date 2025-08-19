@@ -8,12 +8,16 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContextProvider';
 
+
 //componentes públicos
 const Home = lazy(() => import('../pages/publicPages/home/Home'));
 const Services = lazy(() => import('../pages/publicPages/services/Services'));
 const AdminRegister = lazy(() => import('../pages/publicPages/adminRegister/AdminRegister'));
 const ResponRegister = lazy(() => import('../pages/publicPages/responRegister/ResponRegister'));
 const Login = lazy(() => import('../pages/publicPages/login/Login'));
+const ValoracionPage = lazy(() =>
+  import('../pages/publicPages/valoracion/ValoracionPage')
+)
 
 //componentes de admin
 const AdminDashboard = lazy(() => import('../pages/adminPages/adminDashboard/AdminDashboard'));
@@ -26,7 +30,6 @@ export const AppRoutes = () => {
       {loading? <h1>Cargando...</h1> :
       <BrowserRouter>
         <Suspense fallback={<h1>Cargando...</h1>}>
-
           <Routes>
             {/* rutas publicas*/}
             <Route element={<PublicRoutes />}>
@@ -40,9 +43,13 @@ export const AppRoutes = () => {
             <Route element={<PublicRoutes />}>
               <Route element={<SemipublicLayout />}>
                 <Route path='/responRegister' element={<ResponRegister />} />
-                <Route path='/login' element={<Login />}/>
+                <Route path='/login' element={<Login />}/>  <Route
+                  path="/solicitar-valoracion"
+                  element={<ValoracionPage />}
+                />
               </Route>
             </Route>
+
 
             {/* rutas privadas de admin */}
             <Route element={<PrivateRoutes userType={user?.type} requiredUser={1} />}>
@@ -50,6 +57,7 @@ export const AppRoutes = () => {
                 <Route path='/admin' element={<AdminDashboard />} />
               </Route>
             </Route>
+
           </Routes>
         </Suspense>
       </BrowserRouter>
