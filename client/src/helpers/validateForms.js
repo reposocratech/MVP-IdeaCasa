@@ -3,7 +3,7 @@ import { ZodError } from 'zod';
 export const validateForms = (schema, data) => {
   try {
     schema.parse(data);
-    return { valid: true, errors: {} }; // si todo va bien
+    return { valid: true, errors: {} };
   } catch (error) {
     if (error instanceof ZodError) {
       const objTemp = {};
@@ -13,7 +13,7 @@ export const validateForms = (schema, data) => {
       return { valid: false, errors: objTemp };
     }
 
-    //error no de validacion
+
     return { valid: false, errors: { message: "Error inesperado en validación" } };
   }
 }
