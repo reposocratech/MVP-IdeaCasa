@@ -1,30 +1,30 @@
 import React, { useState } from 'react'
 import { Button, Form, Col, Row, Container } from 'react-bootstrap'
-import { ButtonType1 } from '../buttonType1/ButtonType1'
+import { ButtonType1 } from '../buttons/buttonType1/ButtonType1'
 import { fetchData } from '../../helpers/axiosHelper'
 import { valoracionSchema } from '../../schemas/valoracionSchema'
-import { ZodError } from 'zod'
+import { validateForms } from '../../helpers/validateForms'
 
-const initialValue = {
-  tipo: '',
-  ciudad: '',
-  provincia: '',
-  calle: '',
-  codigoPostal: '',
-  planta: '',
-  dormitorios: '',
-  superficie: '',
-  baños: '',
-  nombreContacto: '',
-  telefonoContacto: '',
-  emailContacto: '',
-  mensajeContacto: '',
-  aceptoPrivacidad: false,
-  aceptoNovedades: false,
+const initialValues = {
+  propertyType: '',
+  city: '',
+  province: '',
+  street: '',
+  postalCode: '',
+  floor: '',
+  bedrooms: '',
+  area: '',
+  bathrooms: '',
+  contactName: '',
+  contactPhone: '',
+  contactEmail: '',
+  contactMessage: '',
+  acceptPrivacy: false,
+  acceptNews: false,
 }
 
 export const Valoracion = () => {
-  const [formData, setFormData] = useState(initialValue)
+  const [formData, setFormData] = useState(initialValues)
   const [formErrors, setFormErrors] = useState({})
   const [msgSuccess, setMsgSuccess] = useState('')
   const [msgError, setMsgError] = useState('')
@@ -45,17 +45,22 @@ export const Valoracion = () => {
     setFormErrors({})
     setMsgSuccess('')
     setMsgError('')
+    const { valid, errors } = validateForms(valoracionSchema, formData)
+
+    if (!valid) {
+      setFormErrors(errors)
+      setMsgError('Por favor, corrige los errores en el formulario.')
+      return
+    }
 
     try {
-      valoracionSchema.parse(formData)
-
       const res = await fetchData('/valoracion/solicitar', 'post', formData)
 
       if (res.status === 200) {
         setMsgSuccess(
           '¡Solicitud de valoración enviada con éxito! Pronto nos pondremos en contacto con usted.'
         )
-        setFormData(initialValue)
+        setFormData(initialValues)
       } else {
         setMsgError(
           res.data.message ||
@@ -63,19 +68,11 @@ export const Valoracion = () => {
         )
       }
     } catch (error) {
-      if (error instanceof ZodError) {
-        const newErrors = {}
-        error.errors.forEach((err) => {
-          newErrors[err.path[0]] = err.message
-        })
-        setFormErrors(newErrors)
-        setMsgError('Por favor, corrige los errores en el formulario.')
-      } else if (error.response) {
+      if (error.response) {
         setMsgError(
           error.response.data.message ||
             'Error del servidor al procesar la solicitud.'
         )
-
         if (error.response.data.errors) {
           const backendErrors = {}
           error.response.data.errors.forEach((err) => {
@@ -104,107 +101,107 @@ export const Valoracion = () => {
         <Row>
           <Col md={6} className="mb-4 mb-md-0">
             <h4>Datos del Inmueble</h4>
-            <Form.Group className="mb-3" controlId="formTipo">
+            <Form.Group className="mb-3" controlId="formPropertyType">
               <Form.Label>Tipo</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Piso, chalet, local..."
-                name="tipo"
-                value={formData.tipo}
+                name="propertyType"
+                value={formData.propertyType}
                 onChange={handleChange}
-                isInvalid={!!formErrors.tipo}
+                isInvalid={!!formErrors.propertyType}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.tipo}
+                {formErrors.propertyType}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formCiudad">
+            <Form.Group className="mb-3" controlId="formCity">
               <Form.Label>Ciudad</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Málaga"
-                name="ciudad"
-                value={formData.ciudad}
+                name="city"
+                value={formData.city}
                 onChange={handleChange}
-                isInvalid={!!formErrors.ciudad}
+                isInvalid={!!formErrors.city}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.ciudad}
+                {formErrors.city}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formProvincia">
+            <Form.Group className="mb-3" controlId="formProvince">
               <Form.Label>Provincia</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Málaga"
-                name="provincia"
-                value={formData.provincia}
+                name="province"
+                value={formData.province}
                 onChange={handleChange}
-                isInvalid={!!formErrors.provincia}
+                isInvalid={!!formErrors.province}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.provincia}
+                {formErrors.province}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formCalle">
+            <Form.Group className="mb-3" controlId="formStreet">
               <Form.Label>Calle</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Calle del Sol, 1"
-                name="calle"
-                value={formData.calle}
+                name="street"
+                value={formData.street}
                 onChange={handleChange}
-                isInvalid={!!formErrors.calle}
+                isInvalid={!!formErrors.street}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.calle}
+                {formErrors.street}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formCodigoPostal">
+            <Form.Group className="mb-3" controlId="formPostalCode">
               <Form.Label>Código postal</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="29001"
-                name="codigoPostal"
-                value={formData.codigoPostal}
+                name="postalCode"
+                value={formData.postalCode}
                 onChange={handleChange}
-                isInvalid={!!formErrors.codigoPostal}
+                isInvalid={!!formErrors.postalCode}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.codigoPostal}
+                {formErrors.postalCode}
               </Form.Control.Feedback>
             </Form.Group>
 
             <Row className="mb-3">
               <Col xs={12} md={6}>
-                <Form.Group controlId="formPlanta">
+                <Form.Group controlId="formFloor">
                   <Form.Label>Planta</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="2ª"
-                    name="planta"
-                    value={formData.planta}
+                    name="floor"
+                    value={formData.floor}
                     onChange={handleChange}
-                    isInvalid={!!formErrors.planta}
+                    isInvalid={!!formErrors.floor}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {formErrors.planta}
+                    {formErrors.floor}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col xs={12} md={6}>
-                <Form.Group controlId="formDormitorios">
+                <Form.Group controlId="formBedrooms">
                   <Form.Label>Dormitorios</Form.Label>
                   <Form.Control
                     type="number"
                     placeholder="3"
-                    name="dormitorios"
-                    value={formData.dormitorios}
+                    name="bedrooms"
+                    value={formData.bedrooms}
                     onChange={handleChange}
-                    isInvalid={!!formErrors.dormitorios}
+                    isInvalid={!!formErrors.bedrooms}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {formErrors.dormitorios}
+                    {formErrors.bedrooms}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
@@ -212,34 +209,34 @@ export const Valoracion = () => {
 
             <Row className="mb-3">
               <Col xs={12} md={6}>
-                <Form.Group controlId="formSuperficie">
+                <Form.Group controlId="formArea">
                   <Form.Label>Superficie</Form.Label>
                   <Form.Control
                     type="number"
                     placeholder="120 m²"
-                    name="superficie"
-                    value={formData.superficie}
+                    name="area"
+                    value={formData.area}
                     onChange={handleChange}
-                    isInvalid={!!formErrors.superficie}
+                    isInvalid={!!formErrors.area}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {formErrors.superficie}
+                    {formErrors.area}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col xs={12} md={6}>
-                <Form.Group controlId="formBanios">
+                <Form.Group controlId="formBathrooms">
                   <Form.Label>Baños</Form.Label>
                   <Form.Control
                     type="number"
                     placeholder="2"
-                    name="baños"
-                    value={formData.baños}
+                    name="bathrooms"
+                    value={formData.bathrooms}
                     onChange={handleChange}
-                    isInvalid={!!formErrors.baños}
+                    isInvalid={!!formErrors.bathrooms}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {formErrors.baños}
+                    {formErrors.bathrooms}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
@@ -248,71 +245,71 @@ export const Valoracion = () => {
 
           <Col md={6}>
             <h4>Datos de contacto</h4>
-            <Form.Group className="mb-3" controlId="formNombreContacto">
+            <Form.Group className="mb-3" controlId="formContactName">
               <Form.Label>Nombre</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Tu nombre"
-                name="nombreContacto"
-                value={formData.nombreContacto}
+                name="contactName"
+                value={formData.contactName}
                 onChange={handleChange}
-                isInvalid={!!formErrors.nombreContacto}
+                isInvalid={!!formErrors.contactName}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.nombreContacto}
+                {formErrors.contactName}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formTelefonoContacto">
+            <Form.Group className="mb-3" controlId="formContactPhone">
               <Form.Label>Teléfono</Form.Label>
               <Form.Control
                 type="tel"
                 placeholder="612345678"
-                name="telefonoContacto"
-                value={formData.telefonoContacto}
+                name="contactPhone"
+                value={formData.contactPhone}
                 onChange={handleChange}
-                isInvalid={!!formErrors.telefonoContacto}
+                isInvalid={!!formErrors.contactPhone}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.telefonoContacto}
+                {formErrors.contactPhone}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formEmailContacto">
+            <Form.Group className="mb-3" controlId="formContactEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="ejemplo@dominio.com"
-                name="emailContacto"
-                value={formData.emailContacto}
+                name="contactEmail"
+                value={formData.contactEmail}
                 onChange={handleChange}
-                isInvalid={!!formErrors.emailContacto}
+                isInvalid={!!formErrors.contactEmail}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.emailContacto}
+                {formErrors.contactEmail}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formMensajeContacto">
+            <Form.Group className="mb-3" controlId="formContactMessage">
               <Form.Label>Mensaje</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
                 placeholder="Algún detalle adicional sobre el inmueble..."
-                name="mensajeContacto"
-                value={formData.mensajeContacto}
+                name="contactMessage"
+                value={formData.contactMessage}
                 onChange={handleChange}
-                isInvalid={!!formErrors.mensajeContacto}
+                isInvalid={!!formErrors.contactMessage}
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.mensajeContacto}
+                {formErrors.contactMessage}
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formAceptoPrivacidad">
+            <Form.Group className="mb-3" controlId="formAcceptPrivacy">
               <Form.Check
                 type="checkbox"
-                name="aceptoPrivacidad"
-                checked={formData.aceptoPrivacidad}
+                name="acceptPrivacy"
+                checked={formData.acceptPrivacy}
                 onChange={handleChange}
-                isInvalid={!!formErrors.aceptoPrivacidad}
+                isInvalid={!!formErrors.acceptPrivacy}
                 label={
                   <>
                     Acepto que mis datos sean gestionados de acuerdo con mi{' '}
@@ -328,29 +325,31 @@ export const Valoracion = () => {
                 }
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.aceptoPrivacidad}
+                {formErrors.acceptPrivacy}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formAceptoNovedades">
+            <Form.Group className="mb-3" controlId="formAcceptNews">
               <Form.Check
                 type="checkbox"
-                name="aceptoNovedades"
-                checked={formData.aceptoNovedades}
+                name="acceptNews"
+                checked={formData.acceptNews}
                 onChange={handleChange}
-                isInvalid={!!formErrors.aceptoNovedades}
+                isInvalid={!!formErrors.acceptNews}
                 label="Acepto de modo inequívoco recibir boletines, novedades o comunicaciones de esta entidad."
               />
               <Form.Control.Feedback type="invalid">
-                {formErrors.aceptoNovedades}
+                {formErrors.acceptNews}
               </Form.Control.Feedback>
             </Form.Group>
 
             {msgError && <p className="text-danger mt-3">{msgError}</p>}
             {msgSuccess && <p className="text-success mt-3">{msgSuccess}</p>}
 
-            <ButtonType1 type="submit" className="w-100 mt-3 d-block mx-auto">
-              Solicitar Valoración
-            </ButtonType1>
+            <div className="d-flex justify-content-center">
+              <ButtonType1 type="submit" className="w-100 mt-3">
+                Solicitar Valoración
+              </ButtonType1>
+            </div>
           </Col>
         </Row>
       </Form>
