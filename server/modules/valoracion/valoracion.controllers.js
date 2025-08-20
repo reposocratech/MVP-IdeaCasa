@@ -1,19 +1,12 @@
 import { sendEmail } from '../../helpers/emailUtils.js';
 import dotenv from 'dotenv';
-import { valoracionSchema } from '../../schemas/valoracionSchema.js';
-import { ZodError } from 'zod';
-
 dotenv.config();
 
 class ValoracionController {
     solicitarValoracion = async (req, res) => {
         try {
-
-            const validatedData = valoracionSchema.parse(req.body); //
-
-
-            const subject = `Nueva Solicitud de Valoración: ${validatedData.tipo} en ${validatedData.ciudad}`;
-
+            const validatedData = req.body;
+            const subject = `Nueva Solicitud de Valoración: ${validatedData.propertyType} en ${validatedData.city}`;
             const htmlContent = `
                 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -28,7 +21,7 @@ class ValoracionController {
                             <td style="padding: 20px 0 30px 0;">
                                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                                     <tr>
-                                        <td align="center" bgcolor="#007bff" style="padding: 10px 0; border-top-left-radius: 8px; border-top-right-radius: 8 honoured;">
+                                        <td align="center" bgcolor="#007bff" style="padding: 10px 0; border-top-left-radius: 8px; border-top-right-radius: 8px;">
                                             <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold; padding: 10px 0;">¡Nueva Solicitud de Valoración!</h1>
                                         </td>
                                     </tr>
@@ -39,27 +32,27 @@ class ValoracionController {
 
                                             <h2 style="color: #007bff; font-size: 20px; font-weight: 600; margin: 25px 0 15px 0; border-bottom: 1px solid #eeeeee; padding-bottom: 10px;">Datos del Inmueble:</h2>
                                             <ul style="list-style: none; padding: 0; margin: 0;">
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Tipo:</strong> ${validatedData.tipo}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Ciudad:</strong> ${validatedData.ciudad}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Provincia:</strong> ${validatedData.provincia || 'No especificada'}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Calle:</strong> ${validatedData.calle || 'No especificada'}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Código Postal:</strong> ${validatedData.codigoPostal || 'No especificado'}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Planta:</strong> ${validatedData.planta || 'No especificada'}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Dormitorios:</strong> ${validatedData.dormitorios || 'No especificado'}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Superficie:</strong> ${validatedData.superficie ? `${validatedData.superficie} m²` : 'No especificada'}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Baños:</strong> ${validatedData.baños || 'No especificado'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Tipo:</strong> ${validatedData.propertyType}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Ciudad:</strong> ${validatedData.city}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Provincia:</strong> ${validatedData.province || 'No especificada'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Calle:</strong> ${validatedData.street || 'No especificada'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Código Postal:</strong> ${validatedData.postalCode || 'No especificado'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Planta:</strong> ${validatedData.floor || 'No especificada'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Dormitorios:</strong> ${validatedData.bedrooms || 'No especificado'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Superficie:</strong> ${validatedData.area ? `${validatedData.area} m²` : 'No especificada'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Baños:</strong> ${validatedData.bathrooms || 'No especificado'}</li>
                                             </ul>
 
                                             <h2 style="color: #007bff; font-size: 20px; font-weight: 600; margin: 25px 0 15px 0; border-bottom: 1px solid #eeeeee; padding-bottom: 10px;">Datos de Contacto:</h2>
                                             <ul style="list-style: none; padding: 0; margin: 0;">
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Nombre:</strong> ${validatedData.nombreContacto}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Teléfono:</strong> ${validatedData.telefonoContacto || 'No especificado'}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Email:</strong> ${validatedData.emailContacto}</li>
-                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Mensaje:</strong> ${validatedData.mensajeContacto || 'Ninguno'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Nombre:</strong> ${validatedData.contactName}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Teléfono:</strong> ${validatedData.contactPhone || 'No especificado'}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Email:</strong> ${validatedData.contactEmail}</li>
+                                                <li style="margin-bottom: 8px;"><strong style="color: #555555;">Mensaje:</strong> ${validatedData.contactMessage || 'Ninguno'}</li>
                                             </ul>
 
-                                            <p style="margin: 20px 0 5px 0;">El cliente <strong style="color: ${validatedData.aceptoPrivacidad ? '#28a745' : '#dc3545'};">${validatedData.aceptoPrivacidad ? 'ha aceptado' : 'NO ha aceptado'}</strong> la política de privacidad.</p>
-                                            <p style="margin: 5px 0 0 0;">El cliente <strong style="color: ${validatedData.aceptoNovedades ? '#28a745' : '#dc3545'};">${validatedData.aceptoNovedades ? 'ha aceptado' : 'NO ha aceptado'}</strong> recibir boletines y novedades.</p>
+                                            <p style="margin: 20px 0 5px 0;">El cliente <strong style="color: ${validatedData.acceptPrivacy ? '#28a745' : '#dc3545'};">${validatedData.acceptPrivacy ? 'ha aceptado' : 'NO ha aceptado'}</strong> la política de privacidad.</p>
+                                            <p style="margin: 5px 0 0 0;">El cliente <strong style="color: ${validatedData.acceptNews ? '#28a745' : '#dc3545'};">${validatedData.acceptNews ? 'ha aceptado' : 'NO ha aceptado'}</strong> recibir boletines y novedades.</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -75,23 +68,10 @@ class ValoracionController {
                 </body>
                 </html>
             `;
-
             await sendEmail(process.env.EMAIL_RECIPIENT, subject, htmlContent);
-
             res.status(200).json({ message: 'Solicitud de valoración enviada con éxito.' });
-
         } catch (error) {
-
-            if (error instanceof ZodError) { //
-                console.error('Error de validación Zod:', error.errors);
-                const errors = error.errors.map(err => ({
-                    field: err.path.join('.'),
-                    message: err.message
-                }));
-                return res.status(400).json({ message: 'Errores de validación', errors }); //
-            }
-
-            console.error('Error en el controlador solicitarValoracion:', error);
+            console.error('Error en el controlador solicitarValoracion (después de validación):', error);
             res.status(500).json({ message: 'Error interno del servidor al procesar su solicitud.' });
         }
     };
